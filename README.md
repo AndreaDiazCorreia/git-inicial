@@ -41,7 +41,23 @@ git add .
 git add *.txt
 ```
 
+### Crear commits
+```bash
+# Crear un commit con mensaje
+git commit -m "Mensaje descriptivo del commit"
 
+# Añadir y hacer commit en un solo paso (solo para archivos ya rastreados)
+git commit -am "Mensaje del commit"
 
+# Ver el historial de commits
+git log
 
+# Ver el historial de commits en una línea
+git log --oneline
+
+# Ver el historial con gráfico
+git log --oneline --graph
+```
+
+## Comandos iniciales 
 
