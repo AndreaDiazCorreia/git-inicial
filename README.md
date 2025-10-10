@@ -364,3 +364,293 @@ git show --name-only <hash-del-commit>
 git clean -n  # ver qué se eliminará
 git clean -f  #eliminar archivos no rastreados
 git clean -fd  # eliminar archivos y directorios no rastreados
+```
+
+## Archivo .gitignore
+
+### ¿Qué es .gitignore?
+El archivo `.gitignore` le indica a Git qué archivos o directorios debe ignorar y no rastrear.
+
+### Crear y usar .gitignore
+```bash
+# Crear archivo .gitignore en la raíz del proyecto
+touch .gitignore
+
+# Editar con tu editor favorito
+nano .gitignore
+```
+
+### Patrones comunes en .gitignore
+```gitignore
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencias
+node_modules/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Archivos de compilación
+*.o
+*.class
+*.exe
+dist/
+build/
+
+# Archivos de configuración sensibles
+.env
+config.local.js
+secrets.json
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+```
+
+### Comandos útiles con .gitignore
+```bash
+# Ver archivos ignorados
+git status --ignored
+
+# Forzar agregar un archivo ignorado
+git add -f archivo-ignorado.txt
+
+# Dejar de rastrear un archivo ya commiteado (sin eliminarlo)
+git rm --cached archivo.txt
+
+# Dejar de rastrear una carpeta ya commiteada
+git rm -r --cached carpeta/
+```
+
+## Cherry Pick - Aplicar Commits Específicos
+
+### ¿Qué es cherry-pick?
+Permite aplicar un commit específico de una rama a otra, sin fusionar toda la rama.
+
+```bash
+# Aplicar un commit específico a la rama actual
+git cherry-pick <hash-del-commit>
+
+# Aplicar múltiples commits
+git cherry-pick <hash1> <hash2> <hash3>
+
+# Aplicar un rango de commits
+git cherry-pick <hash-inicio>..<hash-fin>
+
+# Cherry-pick sin hacer commit automático
+git cherry-pick -n <hash-del-commit>
+
+# Continuar después de resolver conflictos
+git cherry-pick --continue
+
+# Abortar el cherry-pick
+git cherry-pick --abort
+```
+
+## Submódulos - Repositorios Dentro de Repositorios
+
+### Agregar un submódulo
+```bash
+# Agregar un repositorio como submódulo
+git submodule add https://github.com/usuario/repo.git ruta/al/submodulo
+
+# Ver submódulos
+git submodule status
+```
+
+### Trabajar con submódulos
+```bash
+# Clonar un repositorio con submódulos
+git clone --recursive https://github.com/usuario/repo.git
+
+# Inicializar submódulos después de clonar
+git submodule init
+git submodule update
+
+# Actualizar todos los submódulos
+git submodule update --remote
+
+# Eliminar un submódulo
+git submodule deinit ruta/al/submodulo
+git rm ruta/al/submodulo
+```
+
+## Hooks - Automatización con Git
+
+### ¿Qué son los hooks?
+Los hooks son scripts que Git ejecuta automáticamente en ciertos eventos.
+
+### Ubicación de los hooks
+Los hooks se encuentran en `.git/hooks/`
+
+### Hooks comunes
+```bash
+# pre-commit: Se ejecuta antes de hacer commit
+# Ejemplo: verificar formato de código
+.git/hooks/pre-commit
+
+# commit-msg: Se ejecuta al crear el mensaje de commit
+# Ejemplo: validar formato del mensaje
+.git/hooks/commit-msg
+
+# pre-push: Se ejecuta antes de hacer push
+# Ejemplo: ejecutar tests
+.git/hooks/pre-push
+
+# post-merge: Se ejecuta después de un merge
+# Ejemplo: instalar dependencias
+.git/hooks/post-merge
+```
+
+### Crear un hook simple
+```bash
+# Crear hook pre-commit
+cat > .git/hooks/pre-commit << 'EOF'
+#!/bin/bash
+echo "Ejecutando verificaciones antes del commit..."
+# Agregar tus verificaciones aquí
+EOF
+
+# Dar permisos de ejecución
+chmod +x .git/hooks/pre-commit
+```
+
+## Bisect - Encontrar el Commit que Introdujo un Bug
+
+### Uso de git bisect
+```bash
+# Iniciar bisect
+git bisect start
+
+# Marcar el commit actual como malo
+git bisect bad
+
+# Marcar un commit anterior que funcionaba como bueno
+git bisect good <hash-commit-bueno>
+
+# Git irá mostrando commits intermedios
+# Prueba cada uno y marca como good o bad
+git bisect good  # si funciona
+git bisect bad   # si tiene el bug
+
+# Git encontrará el commit problemático
+
+# Terminar bisect
+git bisect reset
+```
+
+## Reflog - Recuperar Commits Perdidos
+
+### ¿Qué es reflog?
+El reflog registra todos los movimientos de HEAD, incluso commits "perdidos".
+
+```bash
+# Ver el historial de reflog
+git reflog
+
+# Ver reflog con más detalle
+git reflog show --all
+
+# Recuperar un commit "perdido"
+git reflog  # encontrar el hash
+git checkout <hash-del-commit>
+git branch recuperar-rama  # crear rama desde ese commit
+
+# Deshacer un reset hard
+git reflog
+git reset --hard HEAD@{n}  # donde n es el número en reflog
+```
+
+## Alias - Atajos Personalizados
+
+### Crear alias útiles
+```bash
+# Alias para comandos comunes
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.unstage 'reset HEAD --'
+
+# Alias más complejos
+git config --global alias.lg "log --oneline --graph --all --decorate"
+git config --global alias.last 'log -1 HEAD'
+git config --global alias.visual "log --graph --oneline --all"
+git config --global alias.undo 'reset --soft HEAD~1'
+
+# Ver todos los alias configurados
+git config --global --get-regexp alias
+```
+
+### Usar los alias
+```bash
+# En lugar de: git status
+git st
+
+# En lugar de: git log --oneline --graph --all
+git lg
+```
+
+## Worktree - Múltiples Directorios de Trabajo
+
+### ¿Qué es worktree?
+Permite trabajar en múltiples ramas simultáneamente en diferentes directorios.
+
+```bash
+# Crear un nuevo worktree
+git worktree add ../proyecto-feature feature-branch
+
+# Listar worktrees
+git worktree list
+
+# Eliminar un worktree
+git worktree remove ../proyecto-feature
+
+# Limpiar worktrees obsoletos
+git worktree prune
+```
+
+## Comandos de Inspección Avanzados
+
+```bash
+# Ver el historial de un archivo específico
+git log --follow archivo.txt
+
+# Ver cambios en un archivo a través del tiempo
+git log -p archivo.txt
+
+# Ver estadísticas de commits por autor
+git shortlog -sn
+
+# Ver commits por fecha
+git log --since="2 weeks ago"
+git log --until="2024-01-01"
+
+# Ver commits que modificaron una función específica
+git log -L :nombre_funcion:archivo.py
+
+# Buscar en el contenido de commits
+git log -S "texto-a-buscar"
+
+# Ver árbol de archivos en un commit
+git ls-tree -r <hash-del-commit>
+
+# Comparar dos commits
+git diff <commit1> <commit2>
+
+# Ver cambios entre branches con estadísticas
+git diff --stat main..feature
