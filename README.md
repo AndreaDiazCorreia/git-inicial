@@ -232,6 +232,100 @@ git merge --abort  # para merge
 git rebase --abort  # para rebase
 ```
 
+### Entendiendo los marcadores de conflicto
+Cuando Git encuentra un conflicto, marca las secciones conflictivas en el archivo de esta forma:
+
+```
+Este es el código en tu rama actual (HEAD)
+Puede ser una o varias líneas
+```
+
+**Explicación de los marcadores:**
+- `<<<<<<< HEAD`: Inicio del código en tu rama actual
+- `=======`: Separador entre las dos versiones
+- `>>>>>>> nombre-de-la-rama`: Fin del código de la otra rama
+
+### Tipos de conflictos comunes
+
+#### 1. Conflicto de contenido
+Ocurre cuando dos ramas modifican las mismas líneas de un archivo de forma diferente.
+
+**Ejemplo:**
+```
+def calcular_total(precio):
+    return precio * 1.21  # IVA 21%
+```
+
+**Solución:** Decide qué versión mantener o combina ambas.
+
+#### 2. Conflicto de eliminación
+Una rama elimina un archivo mientras otra lo modifica.
+
+```bash
+# Git te preguntará qué hacer
+# Mantener el archivo modificado:
+git add archivo.txt
+
+# Confirmar la eliminación:
+git rm archivo.txt
+```
+
+#### 3. Conflicto de renombrado
+Dos ramas renombran el mismo archivo de forma diferente.
+
+### Estrategias para resolver conflictos
+
+#### Opción 1: Edición manual (recomendado)
+1. Abre el archivo en tu editor
+2. Busca los marcadores `<<<<<<<`, `=======`, `>>>>>>>`
+3. Decide qué código mantener
+4. Elimina los marcadores de conflicto
+5. Guarda el archivo
+6. Marca como resuelto con `git add`
+
+#### Opción 2: Aceptar una versión completa
+```bash
+# Aceptar tu versión (HEAD) para un archivo
+git checkout --ours archivo.txt
+
+# Aceptar la versión de la otra rama para un archivo
+git checkout --theirs archivo.txt
+
+# Marcar como resuelto
+git add archivo.txt
+```
+
+#### Opción 3: Usar herramientas de merge
+```bash
+# Abrir herramienta visual de merge (si está configurada)
+git mergetool
+
+# Configurar una herramienta de merge (ejemplo con VS Code)
+git config --global merge.tool vscode
+git config --global mergetool.vscode.cmd 'code --wait $MERGED'
+```
+
+### Prevenir conflictos
+
+**Buenas prácticas:**
+- Mantén tu rama actualizada con la rama principal frecuentemente
+- Haz commits pequeños y específicos
+- Comunica con tu equipo sobre qué archivos estás modificando
+- Usa `git pull --rebase` para mantener un historial más limpio
+- Divide el trabajo en archivos o funciones diferentes cuando sea posible
+
+### Verificar después de resolver
+```bash
+# Ver el estado después de resolver
+git status
+
+# Verificar que no quedan marcadores de conflicto
+git diff --check
+
+# Ver los cambios que se van a commitear
+git diff --cached
+```
+
 ## Deshacer Cambios
 
 ### Deshacer cambios en el working directory
