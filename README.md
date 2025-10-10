@@ -209,13 +209,9 @@ git clone -b nombre-rama https://github.com/usuario/repositorio.git
 
 ### Cuando ocurre un conflicto
 Los conflictos ocurren cuando Git no puede fusionar automáticamente los cambios. Los archivos en conflicto tendrán marcadores como:
-```
-<<<<<<< HEAD
+
 Tu versión del código
-=======
-La versión del código que intentas fusionar
->>>>>>> nombre-rama
-```
+
 
 ### Resolver conflictos
 ```bash
