@@ -362,7 +362,5 @@ git show --name-only <hash-del-commit>
 
 # Limpiar archivos no rastreados
 git clean -n  # ver qué se eliminará
-git clean -f  # eliminar archivos no rastreados
+git clean -f  #eliminar archivos no rastreados
 git clean -fd  # eliminar archivos y directorios no rastreados
-```
-
