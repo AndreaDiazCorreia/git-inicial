@@ -144,3 +144,229 @@ git rebase --abort
 
 # Rebase interactivo (para reorganizar, editar o combinar commits)
 git rebase -i HEAD~n  # donde n es el número de commits
+```
+
+## Trabajo con Repositorios Remotos
+
+### Conectar con un repositorio remoto
+```bash
+# Agregar un repositorio remoto
+git remote add origin https://github.com/usuario/repositorio.git
+
+# Ver los repositorios remotos configurados
+git remote -v
+
+# Cambiar la URL de un remoto
+git remote set-url origin https://github.com/usuario/nuevo-repositorio.git
+
+# Eliminar un remoto
+git remote remove origin
+```
+
+### Subir cambios (Push)
+```bash
+# Subir cambios de la rama actual al remoto
+git push origin nombre-rama
+
+# Subir y establecer la rama remota como upstream
+git push -u origin nombre-rama
+
+# Subir todas las ramas
+git push --all origin
+
+# Subir tags
+git push --tags
+```
+
+### Descargar cambios (Pull y Fetch)
+```bash
+# Descargar y fusionar cambios del remoto
+git pull origin nombre-rama
+
+# Descargar cambios sin fusionar
+git fetch origin
+
+# Descargar cambios de todas las ramas
+git fetch --all
+
+# Pull con rebase en lugar de merge
+git pull --rebase origin nombre-rama
+```
+
+### Clonar repositorios
+```bash
+# Clonar un repositorio remoto
+git clone https://github.com/usuario/repositorio.git
+
+# Clonar en un directorio específico
+git clone https://github.com/usuario/repositorio.git nombre-directorio
+
+# Clonar solo una rama específica
+git clone -b nombre-rama https://github.com/usuario/repositorio.git
+```
+
+## Resolución de Conflictos
+
+### Cuando ocurre un conflicto
+Los conflictos ocurren cuando Git no puede fusionar automáticamente los cambios. Los archivos en conflicto tendrán marcadores como:
+```
+<<<<<<< HEAD
+Tu versión del código
+=======
+La versión del código que intentas fusionar
+>>>>>>> nombre-rama
+```
+
+### Resolver conflictos
+```bash
+# 1. Ver archivos en conflicto
+git status
+
+# 2. Editar manualmente los archivos para resolver conflictos
+
+# 3. Marcar como resuelto añadiendo los archivos
+git add archivo-resuelto.txt
+
+# 4. Completar el merge o rebase
+git commit  # para merge
+git rebase --continue  # para rebase
+
+# Abortar si no puedes resolver
+git merge --abort  # para merge
+git rebase --abort  # para rebase
+```
+
+## Deshacer Cambios
+
+### Deshacer cambios en el working directory
+```bash
+# Descartar cambios en un archivo específico
+git checkout -- nombre-archivo.txt
+
+# Descartar todos los cambios no guardados
+git checkout -- .
+
+# Alternativa moderna
+git restore nombre-archivo.txt
+git restore .
+```
+
+### Deshacer cambios en staging
+```bash
+# Quitar un archivo del staging area (mantiene los cambios)
+git reset HEAD nombre-archivo.txt
+
+# Alternativa moderna
+git restore --staged nombre-archivo.txt
+```
+
+### Deshacer commits
+```bash
+# Deshacer el último commit manteniendo los cambios
+git reset --soft HEAD~1
+
+# Deshacer el último commit y quitar del staging (mantiene cambios en working directory)
+git reset HEAD~1
+
+# Deshacer el último commit y eliminar todos los cambios (PELIGROSO)
+git reset --hard HEAD~1
+
+# Crear un nuevo commit que deshace un commit anterior
+git revert <hash-del-commit>
+```
+
+## Guardar Cambios Temporalmente (Stash)
+
+```bash
+# Guardar cambios temporalmente
+git stash
+
+# Guardar con un mensaje descriptivo
+git stash save "mensaje descriptivo"
+
+# Ver lista de stashes
+git stash list
+
+# Aplicar el último stash
+git stash apply
+
+# Aplicar un stash específico
+git stash apply stash@{n}
+
+# Aplicar y eliminar el último stash
+git stash pop
+
+# Eliminar un stash específico
+git stash drop stash@{n}
+
+# Eliminar todos los stashes
+git stash clear
+```
+
+## Etiquetas (Tags)
+
+```bash
+# Crear una etiqueta ligera
+git tag v1.0.0
+
+# Crear una etiqueta anotada (recomendado)
+git tag -a v1.0.0 -m "Versión 1.0.0"
+
+# Ver todas las etiquetas
+git tag
+
+# Ver información de una etiqueta
+git show v1.0.0
+
+# Etiquetar un commit específico
+git tag -a v1.0.0 <hash-del-commit> -m "Mensaje"
+
+# Subir una etiqueta al remoto
+git push origin v1.0.0
+
+# Subir todas las etiquetas
+git push origin --tags
+
+# Eliminar una etiqueta local
+git tag -d v1.0.0
+
+# Eliminar una etiqueta remota
+git push origin --delete v1.0.0
+```
+
+## Buenas Prácticas
+
+### Mensajes de commit
+- Usa el imperativo: "Agrega función" en lugar de "Agregada función"
+- Primera línea: resumen corto (50 caracteres o menos)
+- Deja una línea en blanco
+- Descripción detallada si es necesario
+
+### Flujo de trabajo recomendado
+1. Crea una rama para cada nueva funcionalidad o corrección
+2. Haz commits pequeños y frecuentes
+3. Escribe mensajes de commit descriptivos
+4. Mantén tu rama actualizada con la rama principal
+5. Revisa los cambios antes de hacer commit
+6. Usa pull requests para revisión de código
+
+### Comandos útiles adicionales
+```bash
+# Ver quién modificó cada línea de un archivo
+git blame nombre-archivo.txt
+
+# Buscar en el historial de commits
+git log --grep="palabra-clave"
+
+# Ver cambios de un commit específico
+git show <hash-del-commit>
+
+# Ver archivos modificados en un commit
+git show --name-only <hash-del-commit>
+
+# Limpiar archivos no rastreados
+git clean -n  # ver qué se eliminará
+git clean -f  # eliminar archivos no rastreados
+git clean -fd  # eliminar archivos y directorios no rastreados
+```
+
