@@ -459,7 +459,7 @@ git clean -n  # ver qué se eliminará
 git clean -f  #eliminar archivos no rastreados
 git clean -fd  # eliminar archivos y directorios no rastreados
 ```
-
+Inicialmente no hace falta un git ignore pero es buena practica 
 ## Archivo .gitignore
 
 ### ¿Qué es .gitignore?
