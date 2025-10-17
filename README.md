@@ -1752,6 +1752,8 @@ git clean -fd                     # Limpiar archivos no rastreados
 
 ¿Encontraste un error o quieres agregar algo? ¡Las contribuciones son bienvenidas!
 
+Saludos si llegaste hasta aca
+
 ---
 
 **¡Feliz coding con Git! 🚀**
